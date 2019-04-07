@@ -5,6 +5,12 @@ const mongoUtil = require('../dao/mongoUtil');
 
 const router = express.Router();
 router.use(formidable());
+router.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'POST, PUT, GET, OPTIONS, DELETE');
+  next();
+});
 
 // add an article route
 router.post('/articles', (req, res) => {
@@ -31,6 +37,8 @@ router.post('/articles', (req, res) => {
 
 // update article route
 router.put('/articles/:id', (req, res) => {
+  const reqValId = idCheck(req.params.id);
+  if (!reqValId.status) return res.status(422).send(reqValId.errors);
   const reqVal = onCreateReqValidation(req);
   if (!reqVal.status) return res.status(422).send(reqVal.errors);
 
@@ -60,7 +68,7 @@ router.get('/articles/:id', (req, res) => {
 
   mongoUtil.getCollection().find({ _id: ObjectID(req.params.id) }).toArray((err, docs) => {
     if (err) console.log(err);
-    if (docs[0]) return res.status(200).send(docs);
+    if (docs[0]) return res.status(200).send(docs[0]);
     if (!docs[0]) return res.status(404).send({
       errors: [
         { field: 'id', error: 'Not found' },
@@ -71,6 +79,7 @@ router.get('/articles/:id', (req, res) => {
 
 // get articles route
 router.get('/articles', (req, res) => {
+  console.log(req);
   const reqVal = onGetReqValidation(req);
   if (!reqVal.status) return res.status(422).send(reqVal.errors);
 

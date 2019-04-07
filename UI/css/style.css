@@ -1,5 +1,5 @@
 body {
-  background-color: darkgrey;
+  background-color: rgb(189, 188, 188);
   padding: 0;
   margin: 0;
 }
@@ -10,10 +10,15 @@ header {
   border-bottom: 2px solid black;
 }
 
-#articles {
+#articles, #home {
   display: block;
   width: 90%;
   margin: 0 auto;
+  text-align: center;
+}
+
+#home {
+  font-size: 2em;
 }
 
 #articlesHeader {
@@ -41,4 +46,57 @@ header {
 }
 #articles table button{
   margin: 0 5%;
+}
+
+#createForm, #editForm {
+  width: 100%;
+  margin: 0 5%;
+}
+#createForm input, #editForm input{
+  width: 30%;
+}
+#createForm textarea, #editForm textarea {
+  width: 30%;
+  height: 200px;
+}
+#createForm button, #editForm button{
+  margin: 0 20px;
+}
+/* Rewrited Bootstrap styles */
+.pagination {
+  text-align: center;
+}
+.pagination .page-link {
+  background: rgba(255,255,255,0);
+  background-color: rgba(255,255,255,0);
+  border: 0;
+  color: #555;
+}
+
+.page-item.active .page-link {
+  background-color: rgba(255,255,255,0);
+}
+
+.pagination .page-item li:active {
+  border: 0;
+}
+
+.pagination a:focus, .pagination a:active{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.modal-footer {
+  justify-content: flex-start;
+}
+
+.modal-footer span i{
+  color: blue;
+}
+
+@media (min-width: 1000px) {
+  .modal-dialog {
+      max-width: 900px !important;
+      margin: 1.75rem auto;
+  }
 }

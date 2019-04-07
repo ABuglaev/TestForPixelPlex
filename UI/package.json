@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": ".\\node_modules\\.bin\\webpack --watch",
-    "livebuild": ".\\node_modules\\.bin\\webpack-dev-server --progress --colors",
-    "start": "lite-server"
+    "start": ".\\node_modules\\.bin\\webpack-dev-server --progress --colors --hot --open --historyApiFallback"
   },
   "author": "ABuglaev",
   "license": "ISC",
@@ -17,16 +16,21 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "eslint": "^5.16.0",
-    "lite-server": "^2.4.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "history": "^4.9.0",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.6",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.0"
+    "react-router-dom": "^5.0.0",
+    "webpack-dev-server": "^3.2.1"
   }
 }
