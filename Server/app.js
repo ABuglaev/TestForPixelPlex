@@ -12,5 +12,5 @@ mongoUtil.connectToServer();
 
 // start server
 app.listen(8080, () => {
-  console.log(`Server succefully started on ${chalk.yellow(':8080')}`);
+  console.log(`Server started on ${chalk.yellow(':8080')}`);
 });

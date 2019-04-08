@@ -23,30 +23,13 @@ export default class App extends React.Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    // console.log('453'.match(/\D/g));
-  }
-
   render() {
     return (
       <Router history={history}>
-        <div>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/articles">Articles</Link>
-            </li>
-          </ul>
-
-          <hr />
-
-          <Route exact path="/" component={Home} />
-          <Route exact path="/articles" component={Articles} />
-          <Route path="/articles/create" component={CreateForm} />
-          <Route path="/articles/:id/edit" component={EditForm} />
-        </div>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/articles" component={Articles} />
+        <Route path="/articles/create" component={CreateForm} />
+        <Route path="/articles/:id/edit" component={EditForm} />
       </Router>
     );
   }

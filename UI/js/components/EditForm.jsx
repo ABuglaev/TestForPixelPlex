@@ -1,3 +1,4 @@
+// Можно было переиспользовать компонент для создания статьи, отказался сознательно
 import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import axios from 'axios';
@@ -11,10 +12,6 @@ class EditForm extends React.Component {
     this.updateArticle = this.updateArticle.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCancelClick = this.onCancelClick.bind(this);
-  }
-
-  componentDidMount() {
-
   }
 
   onSubmit(e) {

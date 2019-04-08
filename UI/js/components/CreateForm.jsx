@@ -13,10 +13,6 @@ class CreateForm extends React.Component {
     this.onCancelClick = this.onCancelClick.bind(this);
   }
 
-  componentDidMount() {
-
-  }
-
   onSubmit(e) {
     e.preventDefault();
     console.log('Create clicked');
