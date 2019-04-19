@@ -1,20 +1,24 @@
 import React from 'react';
-import { Router, Route, Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+
 import axios from 'axios';
+
+import { createStore, applyMiddleware } from 'redux';
+import { connect } from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 import Modal from 'react-bootstrap/Modal';
 
-import CreateForm from './CreateForm.jsx';
-import EditForm from './EditForm.jsx';
+import gotArticles from '../store/actions';
 
 let items = [];
 for (let number = 1; number <= 5; number++) {
   items.push(
-    <li className="page-item" key={number}>
-      <Link role="button" to={`?page=${number}`} className="page-link" num={number}>
+    <li className="page-item" key={`page${number}`}>
+      <Link to={`?page=${number}`} className="page-link" num={number}>
         {number}
       </Link>
     </li>,
@@ -27,26 +31,41 @@ class Articles extends React.Component {
     this.onPageClick = this.onPageClick.bind(this);
     this.getAnArticle = this.getAnArticle.bind(this);
     this.handleClose = this.handleClose.bind(this);
-
     this.state = {
-      articles: [{ _id: '', title: 'There no articles yet', body: '' }],
       show: false,
-      created_at: null,
-      updated_at: null,
-      title: null,
-      body: null,
     };
   }
 
   componentDidMount() {
-    this.getArticles('http://localhost:8080/articles?page=1');
-    document.getElementById('articlesPagination').firstChild.classList.add('active');
+    console.log('Articles props: ', this.props);
+    let params = new URLSearchParams(location.search);
+    let p = params.get('page') || 1;
+    let l = params.get('limit');
+
+    this.getArticles(`http://localhost:8080/articles?page=${p}&limit=${l}`);
+    document.querySelector(`#articlesPagination li:nth-child(${p})`).classList.add('active');
+
+    window.onpopstate = () => {
+      console.log('location changed');
+      let params = new URLSearchParams(location.search);
+      let p = params.get('page') || 1;
+      let l = params.get('limit');
+
+      document.querySelectorAll('.page-item').forEach(v => v.classList.remove('active'));
+      document.querySelector(`#articlesPagination li:nth-child(${p})`).classList.add('active');
+
+      if (p && l) {
+        this.getArticles(`http://localhost:8080/articles?page=${p}&limit=${l}`);
+      } else
+      if (p) {
+        this.getArticles(`http://localhost:8080/articles?page=${p}`);
+      }
+    };
   }
 
   onPageClick(e) {
     e.preventDefault();
     let p = e.target.getAttribute('num');
-    this.props.history.push(`/articles?page=${p}`);
     e.target.parentNode.parentNode.childNodes.forEach(v => v.classList.remove('active'));
     e.target.parentNode.classList.add('active');
     this.getArticles(`http://localhost:8080/articles?page=${p}`);
@@ -55,7 +74,6 @@ class Articles extends React.Component {
   onViewClick(e) {
     e.preventDefault();
     let a = e.target.parentNode.parentNode.id;
-    console.log(a);
     this.getAnArticle(`http://localhost:8080/articles/${a}`);
   }
 
@@ -68,8 +86,8 @@ class Articles extends React.Component {
       },
     })
       .then((response) => {
-        if (!response.data.articles) return this.setState({ articles: [{ _id: '', title: 'There no articles yet', body: '' }] });
-        return this.setState({ articles: response.data.articles });
+        if (!response.data) return console.log('There no  articles!');
+        return this.props.gotArticles(response.data.articles);
       });
   }
 
@@ -85,8 +103,6 @@ class Articles extends React.Component {
         if (!response.data) return console.log('This article doesn\'t exist!');
         let cd = (new Date(response.data.created_at)).toISOString();
         let ud = (new Date(response.data.updated_at)).toISOString();
-        console.log('Created: ', cd);
-        console.log('Updated: ', ud);
         return this.setState({
           show: true,
           created_at: cd,
@@ -102,11 +118,12 @@ class Articles extends React.Component {
   }
 
   render() {
-    const articleTrs = this.state.articles.map(v => (
+    console.log('Articles propps before render: ', this.props);
+    let articleTrs = this.props.articles.map(v => (
       <tr id={v._id} key={v._id}>
         <td>{v._id}</td>
-        <td>{v.title}</td>
-        <td>{v.body}</td>
+        <td>{(v.title.length < 15) ? v.title : `${v.title.substring(0, 11)}...`}</td>
+        <td>{(v.body.length < 15) ? v.body : `${v.body.substring(0, 11)}...`}</td>
         <td>
           <Link to={`/articles/${v._id}/edit`}>
             <Button variant="secondary">Edit</Button>
@@ -147,7 +164,7 @@ class Articles extends React.Component {
           <Modal.Header closeButton>
             <Modal.Title>{this.state.title}</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{this.state.body}</Modal.Body>
+          <Modal.Body><pre>{this.state.body}</pre></Modal.Body>
           <Modal.Footer>
             <span>Created: <i>{this.state.created_at}</i></span>
             <span>Updated: <i>{this.state.updated_at}</i></span>
@@ -159,4 +176,18 @@ class Articles extends React.Component {
   }
 }
 
-export default Articles;
+const mapStateToProps = state => (
+  {
+    articles: state.articles,
+  }
+);
+
+const mapDispatchToProps = {
+  gotArticles,
+};
+
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(Articles));

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
 import Button from 'react-bootstrap/Button';
@@ -65,4 +66,16 @@ class CreateForm extends React.Component {
   }
 }
 
-export default withRouter(CreateForm);
+const mapStateToProps = state => (
+  {}
+);
+
+const mapDispatchToProps = dispatch => (
+  {
+  }
+);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(CreateForm));

@@ -1,10 +1,13 @@
 // Можно было переиспользовать компонент для создания статьи, отказался сознательно
 import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+
+import gotArticles from '../store/actions';
 
 class EditForm extends React.Component {
   constructor(props) {
@@ -28,6 +31,20 @@ class EditForm extends React.Component {
     this.props.history.push('/articles');
   }
 
+  getArticles(url) {
+    axios({
+      method: 'get',
+      url,
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (!response.data) return console.log('There no  articles!');
+        return this.props.gotArticles(response.data.articles);
+      });
+  }
+
   updateArticle(url) {
     let formData = new FormData();
     formData.append('title', document.getElementById('titleInput').value);
@@ -42,7 +59,7 @@ class EditForm extends React.Component {
       data: formData,
     })
       .then((response, err) => {
-        if (err) console.log(err);
+        this.getArticles('http://localhost:8080/articles?page=1');
       });
   }
 
@@ -67,4 +84,15 @@ class EditForm extends React.Component {
   }
 }
 
-export default withRouter(EditForm);
+const mapStateToProps = state => (
+  {}
+);
+
+const mapDispatchToProps = {
+  gotArticles,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(EditForm));
