@@ -7,7 +7,7 @@ import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import gotArticles from '../store/actions';
+import { gotArticles } from '../store/actions';
 
 class EditForm extends React.Component {
   constructor(props) {
@@ -19,7 +19,6 @@ class EditForm extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log('Update clicked');
     let _id = this.props.match.params.id;
     this.updateArticle(`http://localhost:8080/articles/${_id}`);
     this.props.history.push('/articles');
@@ -27,7 +26,6 @@ class EditForm extends React.Component {
 
   onCancelClick(e) {
     e.preventDefault();
-    console.log('Cancel clicked');
     this.props.history.push('/articles');
   }
 

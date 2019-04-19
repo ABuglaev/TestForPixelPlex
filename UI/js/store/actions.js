@@ -5,4 +5,11 @@ const gotArticles = articles => (
   }
 );
 
-export default gotArticles;
+const gotCount = count => (
+  {
+    type: 'SET_NEW_STATE_COUNT',
+    payload: count,
+  }
+);
+
+export { gotArticles, gotCount };

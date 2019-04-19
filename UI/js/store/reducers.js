@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 
-import articles from './articles/reducers';
+import { articles, count } from './articles/reducers';
 
 export default combineReducers({
   articles,
+  count,
 });

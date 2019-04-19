@@ -16,14 +16,12 @@ class CreateForm extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log('Create clicked');
     this.createArticle('http://localhost:8080/articles');
     this.props.history.push('/articles');
   }
 
   onCancelClick(e) {
     e.preventDefault();
-    console.log('Cancel clicked');
     this.props.history.push('/articles');
   }
 
@@ -42,6 +40,7 @@ class CreateForm extends React.Component {
     })
       .then((response, err) => {
         if (err) console.log(err);
+        // компонент с таблицей обновится сам
       });
   }
 
@@ -71,8 +70,7 @@ const mapStateToProps = state => (
 );
 
 const mapDispatchToProps = dispatch => (
-  {
-  }
+  {}
 );
 
 export default connect(

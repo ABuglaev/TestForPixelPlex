@@ -1,3 +1,4 @@
+/* ай, css не собирал webpack'ом. из-за наличия бутстрапа его мало */
 body {
   background-color: rgb(189, 188, 188);
   padding: 0;
